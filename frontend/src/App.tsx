@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { fetchData } from './api/todolist'
 import './App.css'
-import {TodoListI} from './types/TodoList'
+import { TodoListI } from './types/TodoList'
 import TodoList from './components/TodoList'
+import { useTheme } from './context/ThemeContext'
 
 function App() {
+  const { theme, toggleTheme } = useTheme();
   const [lists, setLists] = useState<TodoListI[]>([])
 
   useEffect(() => {
@@ -15,22 +17,21 @@ function App() {
     loadData()
   }, [])
 
-  console.log(lists)
   return (
     <>
+    <header style={{ padding: '1rem', textAlign: 'right' }}>
+        <button onClick={toggleTheme} style={{ cursor: 'pointer' }}>
+          Cambiar a modo {theme === 'light' ? 'oscuro' : 'claro'}
+        </button>
+      </header>
       <div>
-      {lists.length > 0 && lists.map(list => (
-        <div key={list.id}>
-          <h2>{list.name}</h2>
-          <ul>
-            {list.todoItems.length > 0 && list.todoItems.map(todo => (
-              <TodoList key={todo.id} todoList={list} />
-            ))}
-          </ul>
-        </div>
-      ))}
+        {lists.length > 0 && lists.map(list => (
+          <div key={list.id}>
+            <TodoList key={list.id} todoList={list} />
+          </div>
+        ))}
       </div>
-    
+
     </>
   )
 }

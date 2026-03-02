@@ -1,0 +1,39 @@
+// src/styles/_variables.scss   
+
+$border-radius: 18px;
+
+// Colores base
+$violet-base: #cd4fec;
+$violet-dark: #621065;
+$violet-light: #f7e9fe;
+
+// Light Mode
+$light-bg: #F5F3FF;
+$light-card: #FFFFFF;
+$light-text: $violet-dark;
+$light-primary: $violet-base;
+$light-danger: #F43F5E;
+
+// Dark Mode
+$dark-bg: #0F071B;
+$dark-card: #1E152E;
+$dark-text: $violet-light;
+$dark-primary: #A78BFA; // Violeta pastel para contraste
+$dark-danger: #FB7185;
+
+// Variables CSS que SASS utilizará para el cambio dinámico
+:root {
+  --bg-color: #{$light-bg};
+  --card-bg: #{$light-card};
+  --text-main: #{$light-text};
+  --primary: #{$light-primary};
+  --danger: #{$light-danger};
+}
+
+[data-theme='dark'] {
+  --bg-color: #{$dark-bg};
+  --card-bg: #{$dark-card};
+  --text-main: #{$dark-text};
+  --primary: #{$dark-primary};
+  --danger: #{$dark-danger};
+}

@@ -48,3 +48,12 @@ export default tseslint.config({
   },
 })
 ```
+
+
+- CRUD completo de listas como items
+- Diseño: mobile first
+- Drag and drop de items dentro de una lista (orden)
+- Guardar en el navegador ese orden
+- Colores: light and dark mode con un switch p cambiar
+- Tests (no todo pero algo)
+- Si uso IA, exportar los prompt

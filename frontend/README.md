@@ -58,4 +58,4 @@ export default tseslint.config({
 - Tests (no todo pero algo)
 - Si uso IA, exportar los prompt
 - NTH: paginación
-- NTH: OnHover del todo, se muestra un popup con la description.
+- NTH: Error toasts.

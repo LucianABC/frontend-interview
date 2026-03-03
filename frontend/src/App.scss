@@ -6,18 +6,41 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
+  svg {
+    stroke: var(--primary);
+    fill: var(--primary);
+  }
   h2 {
     font-weight: 500;
   }
-  h3, h4 {
+
+  h3,
+  h4 {
     color: var(--primary);
     margin: 0;
     font-weight: 400;
   }
-   p {
+
+  p {
     color: var(--text-main);
     margin: 0;
-   }
+  }
+ input {
+  background-color: transparent;
+ }
+  button {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    display: flex;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }
 
 .lists-grid {
@@ -30,7 +53,7 @@
 
 @media (max-width: v.$mobile-breakpoint) {
   .lists-grid {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
     padding: 10px;
   }
 }

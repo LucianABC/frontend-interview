@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import { TodoListI } from "../../types/TodoList"
 import styles from './TodoList.module.scss'
-import plus from '../../assets/plus-circle.svg'
-import x from '../../assets/x.svg'
-import { createListItem, deleteListItem } from "../../api/list-item"
+import Plus from '../../assets/plus-circle.svg?react'
+import { createListItem } from "../../api/list-item"
 import ListItem from "../ListItem/ListItem"
 
 interface Props {
@@ -36,7 +35,7 @@ const TodoList = ({ todoList }: Props) => {
       <div className={styles.content}>
         <div className={styles.addTodo}>
           <input type='text' placeholder="Add new todo" value={newTodo.name} onChange={handleInputChange} />
-          <button aria-label="Add New Todo" onClick={handleAddTodo}><img src={plus} /></button>
+          <button aria-label="Add New Todo" onClick={handleAddTodo}><Plus height={'100%'} /></button>
         </div>
         {todoList.todoItems.length < 1 ? (<h3>No tasks have been entered yet</h3>) :
           (<ul className={styles.list}>

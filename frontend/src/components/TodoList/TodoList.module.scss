@@ -23,39 +23,33 @@
   padding: 15px;
   background-color: var(--card-bg);
 
-  button {
-    background-color: transparent;
-    padding: 0;
-    border: none;
-    height: 20px;
-    width: 20px;
-    display: flex;
-    cursor: pointer;
-    transition: transform 0.2s ease;
 
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
 }
 
 .addTodo {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border: 1px solid var(--primary);
   border-radius: v.$border-radius;
-  background-color: var(--card-bg);
+  background-color: var(--bg-color);
   overflow: hidden;
+  width: 100%;
+
+  button {
+    height: 32px;
+    width: 32px;
+  }
 
   input {
+    width: 100%;
     padding: 8px;
-    background-color: var(--bg-color);
     color: var(--text-main);
     border: none;
-    border-radius: v.$border-radius 0 0 v.$border-radius; 
+    border-radius: v.$border-radius 0 0 v.$border-radius;
   }
 }
 
-.list{
+.list {
   padding: 0;
 }

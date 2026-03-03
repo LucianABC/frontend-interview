@@ -1,0 +1,44 @@
+
+.listItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 5px;
+
+}
+
+.itemContent {
+  display: flex;
+  align-items: center;
+
+  justify-content: space-between;
+  width: 100%;
+  label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    input {
+      margin-right: 10px;
+    }
+  }
+}
+.completed {
+  text-decoration: line-through;
+  color: var(--secondary);
+}
+
+.buttons {
+  display: flex;
+  gap: 3px;
+}
+
+.description {
+  margin-top: 5px;
+  padding-left: 25px;
+  color: var(--secondary);
+  p {
+    margin: 0;
+  }
+}

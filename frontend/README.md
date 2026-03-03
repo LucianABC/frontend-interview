@@ -49,13 +49,25 @@ export default tseslint.config({
 })
 ```
 
-
-- CRUD completo de listas como items
 - Diseño: mobile first
-- Drag and drop de items dentro de una lista (orden)
-- Guardar en el navegador ese orden
 - Colores: light and dark mode con un switch p cambiar
+- CRUD completo de listas como items
+    WIP:
+      TodoItems: 
+      - PUT (falta checkbox)
+      - POST
+      - DELETE
+      - GET all by list id
+      - Falta: Get by list item id (buscar un item dentro de una lista)
+
+      Todolist:
+      -GET all todo lists
+      -Falta: DELETE, PUT, GET by id, POST
+
+
+- Drag and drop de items dentro de una lista (orden) y guardar en el navegador ese orden
 - Tests (no todo pero algo)
 - Si uso IA, exportar los prompt
+
 - NTH: paginación
 - NTH: Error toasts.

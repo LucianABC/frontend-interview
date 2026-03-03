@@ -32,6 +32,7 @@
 .buttons {
   display: flex;
   gap: 3px;
+  align-items: center;
 }
 
 .description {
@@ -41,4 +42,16 @@
   p {
     margin: 0;
   }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.editModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }

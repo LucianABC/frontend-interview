@@ -7,6 +7,10 @@ $violet-base: #cd4fec;
 $violet-dark: #621065;
 $violet-light: #f7e9fe;
 
+
+
+
+
 // Light Mode
 $light-bg: #F5F3FF;
 $light-card: #FFFFFF;
@@ -14,6 +18,8 @@ $light-text: $violet-dark;
 $light-primary: $violet-base;
 $light-danger: #F43F5E;
 $light-secondary: #A78BFA;
+$light-disabled: #E2E8F0; // Un gris azulado claro
+$light-disabled-text: #94A3B8;
 
 // Dark Mode
 $dark-bg: #0F071B;
@@ -22,7 +28,8 @@ $dark-text: $violet-light;
 $dark-primary: #A78BFA; // Violeta pastel para contraste
 $dark-danger: #FB7185;
 $dark-secondary: #D8B4FE; // Violeta claro para texto secundario
-
+$dark-disabled: #334155; // Un gris azulado oscuro
+$dark-disabled-text: #64748B;
 $mobile-breakpoint: 480px;
 $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1280px;
@@ -34,6 +41,8 @@ $desktop-breakpoint: 1280px;
   --primary: #{$light-primary};
   --danger: #{$light-danger};
   --secondary: #{$light-secondary};
+  --disabled: #{$light-disabled};
+  --disabled-text: #{$light-disabled-text};
 }
 
 [data-theme='dark'] {
@@ -43,4 +52,6 @@ $desktop-breakpoint: 1280px;
   --primary: #{$dark-primary};
   --danger: #{$dark-danger};
   --secondary: #{$dark-secondary};
+  --disabled: #{$dark-disabled};
+  --disabled-text: #{$dark-disabled-text};
 }

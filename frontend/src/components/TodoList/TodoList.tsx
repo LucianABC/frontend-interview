@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { TodoListI } from "../../types/TodoList"
 import styles from './TodoList.module.scss'
 import Plus from '../../assets/plus-circle.svg?react'
+import Maximize from '../../assets/maximize.svg?react'
+import Times from '../../assets/times.svg?react'
 import { createListItem } from "../../api/list-item"
 import ListItem from "../ListItem/ListItem"
 
@@ -22,7 +24,7 @@ const TodoList = ({ todoList }: Props) => {
         name: newTodo.name,
         description: newTodo.description
       }
-      createListItem(todoList.id, { ...newItem }) // Llamada a la API para crear el nuevo todo    
+      createListItem(todoList.id, { ...newItem });
     } catch (error) {
       console.error('Error adding todo:', error)
     }
@@ -31,7 +33,14 @@ const TodoList = ({ todoList }: Props) => {
 
   return (
     <div className={styles.wrapper}>
-      <h2>{todoList.name}</h2>
+      <header className={styles.header}>
+
+        <h2>{todoList.name}</h2>
+        <div className={styles.windowControls}>
+          <button aria-label="Minimize Window" className={styles.minimize}><Maximize height={'100%'} /></button>
+          <button aria-label="Delete Todo List" className={styles.close}><Times height={'100%'} /></button>
+        </div>
+      </header>
       <div className={styles.content}>
         <div className={styles.addTodo}>
           <input type='text' placeholder="Add new todo" value={newTodo.name} onChange={handleInputChange} />

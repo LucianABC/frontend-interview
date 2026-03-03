@@ -1,12 +1,13 @@
 
 import React, { useState } from "react"
-import { deleteListItem, updateListItem } from "../../api/list-item"
+import { deleteListItem } from "../../api/list-item"
 import { TodoI } from "../../types/TodoList"
 import styles from './ListItem.module.scss'
 import Times from '../../assets/times.svg?react'
 import Expanded from '../../assets/arrow-down-circle.svg?react'
 import Collapsed from '../../assets/arrow-right-circle.svg?react'
 import Edit from '../../assets/edit.svg?react'
+import EditModal from "./EditItemModal"
 
 interface Props {
   item: TodoI,
@@ -17,8 +18,9 @@ interface Props {
 const ListItem = ({ item, listId, onUpdate }: Props) => {
   const [showButtons, setShowButtons] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const handleDeleteTodo = (itemId: number) => {
+  const handleDelete = (itemId: number) => {
     try {
       deleteListItem(listId, itemId);
     } catch (error) {
@@ -27,12 +29,15 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
   }
 
   const handleOnHover = () => {
-    console.log('hover')
     setShowButtons(true)
   }
 
   const handleOnLeave = () => {
-   // setShowButtons(false)
+    // setShowButtons(false)
+  }
+
+  const handleEditClick = () => {
+    setShowEditModal(true)
   }
 
   return (<li key={item.id} className={styles.listItem} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave}>
@@ -43,13 +48,6 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
       </label>
 
       {showButtons && (<div className={styles.buttons}>
-
-        <button aria-label={`Delete Todo ${item.name}`} onClick={(e) => handleDeleteTodo(item.id)}>
-          <Times width={20} height={20}/>
-        </button>
-        <button aria-label="Edit Button" onClick={() => console.log('Editar')} title="Editar">
-          <Edit width={20} height={20}/>
-        </button>
         {item.description && (
           <button
             onClick={() => setShowDesc(!showDesc)}
@@ -58,6 +56,14 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
             {showDesc ? <Expanded width={20} height={20} /> : <Collapsed width={20} height={20} />}
           </button>
         )}
+
+        <button aria-label="Edit Button" onClick={handleEditClick} title="Editar">
+          <Edit width={18} height={18} />
+        </button>
+        <button aria-label={`Delete Todo ${item.name}`} onClick={(e) => handleDelete(item.id)}>
+          <Times width={18} height={18} />
+        </button>
+
       </div>)}
 
     </div>
@@ -66,6 +72,12 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
       <div className={styles.description}>
         <p>{item.description}</p>
       </div>
+    )}
+    {showEditModal && (<EditModal
+      item={{ ...item, listId }}
+      isOpen={showEditModal}
+      onClose={() => setShowEditModal(false)}
+    />
     )}
   </li>)
 }

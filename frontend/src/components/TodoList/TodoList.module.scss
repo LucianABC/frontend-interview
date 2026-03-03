@@ -7,6 +7,7 @@
   border-radius: v.$border-radius;
   color: var(--text-main);
   overflow: hidden;
+  transition: transform 0.2s ease;
 
   h2 {
     background-color: var(--primary);
@@ -14,15 +15,52 @@
     margin: 0;
     padding: 10px;
   }
-}
 
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+.header {
+  background-color: var(--primary);
+  color: var(--bg-color);
+  margin: 0;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none; // Evita que se seleccione el texto al arrastrar visualmente
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+.windowControls {
+  display: flex;
+  gap: 8px;
+
+  button {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: antiquewhite;
+    svg {
+      fill: var(--bg-color) !important
+    }
+  }
+
+}
 
 .content {
   display: flex;
   flex-direction: column;
   padding: 15px;
   background-color: var(--card-bg);
-
+  
 
 }
 

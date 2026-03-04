@@ -5,7 +5,9 @@ import Plus from '../../assets/plus-circle.svg?react'
 import Maximize from '../../assets/maximize.svg?react'
 import Times from '../../assets/times.svg?react'
 import { createListItem } from "../../api/list-item"
+import { deleteList } from "../../api/list"
 import ListItem from "../ListItem/ListItem"
+import Dialog from "../Dialog/Dialog"
 
 interface Props {
   todoList: TodoListI
@@ -13,6 +15,7 @@ interface Props {
 
 const TodoList = ({ todoList }: Props) => {
   const [newTodo, setNewTodo] = useState<{ name: string, description?: string }>({ name: '', description: '' })
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo({ ...newTodo, name: e.target.value })
@@ -30,15 +33,22 @@ const TodoList = ({ todoList }: Props) => {
     }
   }
 
+  const handleDeleteList = () => {
+    setShowConfirmDialog(true);
+  }
+
+  const handleConfirmDelete = async () => {
+    await deleteList(todoList.id);
+    setShowConfirmDialog(false);
+  }
 
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-
         <h2>{todoList.name}</h2>
         <div className={styles.windowControls}>
           <button aria-label="Minimize Window" className={styles.minimize}><Maximize height={'100%'} /></button>
-          <button aria-label="Delete Todo List" className={styles.close}><Times height={'100%'} /></button>
+          <button aria-label="Delete Todo List" className={styles.close} onClick={handleDeleteList}><Times height={'100%'} /></button>
         </div>
       </header>
       <div className={styles.content}>
@@ -53,7 +63,15 @@ const TodoList = ({ todoList }: Props) => {
             ))}
           </ul>)
         }
-
+        {showConfirmDialog && (<Dialog
+          isOpen={showConfirmDialog}
+          title={"Delete List"}
+          message="Are you sure you want to delete this list? This action cannot be undone."
+          onConfirm={handleConfirmDelete}
+          onCancel={() => {
+            setShowConfirmDialog(false);
+          }}
+        />)}
       </div>
     </div>
   )

@@ -1,6 +1,16 @@
 @use '../variables' as v;
 
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+
+}
+
 #root {
+  min-height: 100vh;
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
@@ -11,7 +21,9 @@
     stroke: var(--primary);
     fill: var(--primary);
   }
+
   h2 {
+    margin: 0;
     padding: 0;
     font-weight: 500;
   }
@@ -27,9 +39,11 @@
     color: var(--text-main);
     margin: 0;
   }
- input {
-  background-color: transparent;
- }
+
+  input {
+    background-color: transparent;
+  }
+
   button {
     background-color: transparent;
     padding: 0;
@@ -37,18 +51,26 @@
     display: flex;
     cursor: pointer;
     transition: transform 0.2s ease;
+    color: var(--primary);
 
     &:hover {
       transform: scale(1.2);
     }
   }
+
+  & > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
 }
 
 input[type=text],
- textarea {
+textarea {
   padding: 0.8rem;
   border-radius: 8px;
-  /* border: 1px solid rgba($violet-base, 0.3); */
+  border: 1px solid rgba(v.$violet-base, 0.3);
   background-color: var(--bg-color);
   color: var(--text-main);
   font-family: inherit;
@@ -60,11 +82,13 @@ input[type=text],
   }
 }
 
-textarea { resize: vertical; }
+textarea {
+  resize: vertical;
+}
 
 .lists-grid {
   display: grid;
-  padding: 20px;
+  padding: 20px 0;
   gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   width: 100%;
@@ -73,6 +97,57 @@ textarea { resize: vertical; }
 @media (max-width: v.$mobile-breakpoint) {
   .lists-grid {
     grid-template-columns: 1fr;
-    padding: 10px;
   }
+}
+
+.switch {
+  display: flex;
+  cursor: pointer;
+
+  input {
+    display: none;
+
+    &:checked+.slider {
+      background-color: var(--primary);
+      justify-content: flex-end;
+
+      .circle {
+        background-color: var(--card-bg);
+      }
+    }
+  }
+}
+
+.slider {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 50px;
+  height: 26px;
+  padding: 0 4px;
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  background-color: rgba(v.$violet-base, 0.2);
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+}
+
+.circle {
+  width: 18px;
+  height: 18px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.new-list-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

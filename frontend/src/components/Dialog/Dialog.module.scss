@@ -1,0 +1,88 @@
+@use '../../../variables' as v;
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.dialogBox {
+  background-color: var(--card-bg);
+  width: 320px;
+  border-radius: 12px;
+  border: 1px solid var(--primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.header {
+  background-color: var(--primary);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--bg-color);
+    font-weight: 500;
+  }
+}
+
+.windowControls {
+  .close {
+    width: 12px;
+    height: 12px;
+    background-color: #ff5f56;
+    border-radius: 50%;
+    display: block;
+    cursor: pointer;
+  }
+}
+
+.body {
+  padding: 20px;
+  color: var(--text-main);
+  text-align: center;
+  p { margin: 0; font-size: 1rem; }
+}
+
+.footer {
+  padding: 12px 20px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.yesBtn, .noBtn {
+  transition: all 0.2s;
+}
+
+.yesBtn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  &:hover { opacity: 0.9; }
+}
+
+.noBtn {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--disabled-text);   
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}

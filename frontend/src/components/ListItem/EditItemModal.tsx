@@ -28,7 +28,7 @@ const EditModal = ({ item, isOpen, onClose }: EditModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} submitEnabled={isSubmitEnabled} title='Edit Todo'>
       <div className={styles.editModalContent}>
-        <div className={styles.field}>
+        <div className='field'>
           <label htmlFor="name">Nombre</label>
           <input
             type="text"
@@ -41,7 +41,7 @@ const EditModal = ({ item, isOpen, onClose }: EditModalProps) => {
           />
         </div>
 
-        <div className={styles.field}>
+        <div className='field'>
           <label htmlFor="description">Descripción</label>
           <textarea
             id="description"

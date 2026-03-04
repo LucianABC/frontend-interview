@@ -61,13 +61,16 @@ export default tseslint.config({
       - Falta: Get by list item id (buscar un item dentro de una lista)
 
       Todolist:
-      -GET all todo lists
-      -Falta: DELETE, PUT, GET by id, POST
+      - GET all todo lists
+      - DELETE 
+      - POST
+      -Falta:  PUT, GET by id,
 
 
 - Drag and drop de items dentro de una lista (orden) y guardar en el navegador ese orden
 - Tests (no todo pero algo)
 - Si uso IA, exportar los prompt
+- Optimistic updates
 
 - NTH: paginación
 - NTH: Error toasts.

@@ -1,6 +1,7 @@
 
-import React, { useState } from "react"
-import { deleteListItem } from "../../api/list-item"
+import { useState } from "react"
+import { useSortable } from "@dnd-kit/sortable"
+import { useLists } from "../../context/ListsContext"
 import { TodoI } from "../../types/TodoList"
 import styles from './ListItem.module.scss'
 import Times from '../../assets/times.svg?react'
@@ -9,20 +10,19 @@ import Collapsed from '../../assets/arrow-right-circle.svg?react'
 import Edit from '../../assets/edit.svg?react'
 import EditModal from "./EditItemModal"
 import Check from '../../assets/check-circle.svg?react'
-import { useDraggable } from '@dnd-kit/core';
 
 interface Props {
   item: TodoI,
   listId: number,
-  onUpdate: () => void
 }
 
-const ListItem = ({ item, listId, onUpdate }: Props) => {
+const ListItem = ({ item, listId }: Props) => {
+  const { deleteListItem } = useLists();
   const [showButtons, setShowButtons] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const {attributes, listeners, setNodeRef, transform} = useDraggable({
-    id: `list-${listId}-item-${item.id}`,
+  const { attributes, listeners, setNodeRef, transform } = useSortable({
+    id: `${listId}-${item.id}`,
   });
 
   const handleDelete = (itemId: number) => {
@@ -47,12 +47,16 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
 
   const style = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    }
     : undefined;
 
-  return (<li key={item.id} className={styles.listItem} style={style} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave} ref={setNodeRef} {...listeners} {...attributes}>
+  return (<li key={`${listId}-${item.id}`} className={styles.listItem} style={style} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave} ref={setNodeRef} >
     <div className={styles.itemContent}>
+      <div className={styles.dragHandle} {...attributes} {...listeners}>
+        {/* Un icono de 6 puntos o similar para indicar que se puede arrastrar */}
+        ⋮⋮
+      </div>
       <label className={styles.checkboxContainer}>
         <input
           type="checkbox"

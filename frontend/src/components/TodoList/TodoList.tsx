@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+import { useDroppable } from '@dnd-kit/core';
 import { TodoListI } from "../../types/TodoList"
 import styles from './TodoList.module.scss'
 import Plus from '../../assets/plus-circle.svg?react'
@@ -21,6 +22,9 @@ const TodoList = ({ todoList }: Props) => {
   const [editMode, setEditMode] = useState(false);
   const [listName, setListName] = useState(todoList.name);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'todo-list-' + todoList.id,
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo({ ...newTodo, name: e.target.value })
@@ -68,7 +72,7 @@ const TodoList = ({ todoList }: Props) => {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} ref={setNodeRef}>
       <header className={styles.header}>
         {editMode ?
           (<InputWithButton
@@ -76,7 +80,7 @@ const TodoList = ({ todoList }: Props) => {
             value={listName}
             onChange={(e) => setListName(e.target.value)}
             onAction={handleSubmitEdit}
-            icon={<Check />} 
+            icon={<Check height={"100%"} width={'100%'}/>}
             buttonLabel="Save List Name"
             variant="secondary"
           />) : (<h2>{listName}</h2>)}

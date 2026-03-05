@@ -66,14 +66,15 @@ export default tseslint.config({
       - DELETE 
       - POST
       - PUT
-      
-      -Falta: GET by id,
-
+      - GET by Id
 
 - Drag and drop de items dentro de una lista (orden) y guardar en el navegador ese orden
 - Tests (no todo pero algo)
+- Funcionalidad de los checks para eso necesito (v)
+- Optimistic updates: CONTEXT!!!!!!!!
+-Input validations
+
 - Si uso IA, exportar los prompt
-- Optimistic updates
 
 - NTH: paginación
 - NTH: Error toasts.

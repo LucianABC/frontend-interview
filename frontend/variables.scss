@@ -31,7 +31,8 @@ $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1280px;
 
 $translucent-dark: rgba(0, 0, 0, 0.2);
-$translucent-light: rgba(255, 255, 255, 0.13);
+$translucent-light: rgba(255, 255, 255, 0.2);
+
 :root {
   --bg-color: #{$light-bg};
   --card-bg: #{$light-card};
@@ -41,6 +42,8 @@ $translucent-light: rgba(255, 255, 255, 0.13);
   --secondary: #{$light-secondary};
   --disabled: #{$light-disabled};
   --disabled-text: #{$light-disabled-text};
+  --translucent-primary: #{$translucent-dark};
+  --translucent-secondary: #{$translucent-light};
 }
 
 [data-theme='dark'] {
@@ -52,4 +55,6 @@ $translucent-light: rgba(255, 255, 255, 0.13);
   --secondary: #{$dark-secondary};
   --disabled: #{$dark-disabled};
   --disabled-text: #{$dark-disabled-text};
+  --translucent-primary: #{$translucent-light};
+  --translucent-secondary: #{$translucent-dark};
 }

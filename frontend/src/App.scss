@@ -19,12 +19,14 @@ body {
   svg {
     stroke: var(--primary);
     fill: var(--primary);
+    color: var(--card-bg)
   }
 
   h2 {
     margin: 0;
     padding: 0;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1.25rem;
   }
 
   h3,
@@ -37,10 +39,6 @@ body {
   p {
     color: var(--text-main);
     margin: 0;
-  }
-
-  input {
-    padding-left: 1rem;
   }
 
   button {
@@ -57,7 +55,7 @@ body {
     }
   }
 
-  & > header {
+  &>header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -99,63 +97,17 @@ textarea {
   }
 }
 
-.switch {
-  display: flex;
-  cursor: pointer;
-
-  input {
-    display: none;
-
-    &:checked+.slider {
-      background-color: var(--primary);
-      justify-content: flex-end;
-
-      .circle {
-        background-color: var(--card-bg);
-      }
-    }
-  }
-}
-
-.slider {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 50px;
-  height: 26px;
-  padding: 0 4px;
-  border-radius: 20px;
-  border: 1px solid var(--primary);
-  background-color: rgba(v.$violet-base, 0.2);
-  transition: all 0.3s ease;
-  margin-right: 1rem;
-}
-
-.circle {
-  width: 18px;
-  height: 18px;
-  background-color: var(--primary);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 
-  input[type='text'] , textarea {
-    background-color: v.$translucent-dark !important;
-
+  input[type='text'],
+  textarea {
+    background-color: var(--translucent-primary);
     &:focus {
       outline: none;
       border-color: var(--secondary);
     }
   }
-}
-
-.new-list-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }

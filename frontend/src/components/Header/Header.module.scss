@@ -1,0 +1,63 @@
+@use '../../../variables.scss' as v;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+}
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerButton {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 0.5rem;
+}
+
+.switch {
+  display: flex;
+  cursor: pointer;
+
+  align-items: center;
+  input {
+    display: none;
+
+    &:checked+.slider {
+      background-color: var(--primary);
+      justify-content: flex-end;
+
+      .circle {
+        background-color: var(--card-bg);
+      }
+    }
+  }
+}
+
+
+.slider {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 50px;
+  height: 36px;
+  padding: 0 4px;
+  border-radius: 20px;
+  border: 1px solid var(--primary);
+  background-color: rgba(v.$violet-base, 0.2);
+  transition: all 0.3s ease;
+  margin: 0;
+  margin-right: 1rem;
+}
+
+.circle {
+  width: 18px;
+  height: 18px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}

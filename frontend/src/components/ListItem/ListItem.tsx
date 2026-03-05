@@ -9,6 +9,7 @@ import Collapsed from '../../assets/arrow-right-circle.svg?react'
 import Edit from '../../assets/edit.svg?react'
 import EditModal from "./EditItemModal"
 import Check from '../../assets/check-circle.svg?react'
+import { useDraggable } from '@dnd-kit/core';
 
 interface Props {
   item: TodoI,
@@ -20,6 +21,9 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
   const [showButtons, setShowButtons] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    id: `list-${listId}-item-${item.id}`,
+  });
 
   const handleDelete = (itemId: number) => {
     try {
@@ -41,7 +45,13 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
     setShowEditModal(true)
   }
 
-  return (<li key={item.id} className={styles.listItem} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave}>
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
+  return (<li key={item.id} className={styles.listItem} style={style} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave} ref={setNodeRef} {...listeners} {...attributes}>
     <div className={styles.itemContent}>
       <label className={styles.checkboxContainer}>
         <input
@@ -50,7 +60,7 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
           onChange={() => {/* Aquí iría tu lógica de update */ }}
         />
         <span className={styles.customCheck}>
-          {item.done && <Check/>}
+          {item.done && <Check />}
         </span>
         <h3 className={item.done ? styles.completed : ''}>{item.name}</h3>
       </label>

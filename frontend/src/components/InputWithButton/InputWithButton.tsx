@@ -4,7 +4,7 @@ import styles from './InputWithButton.module.scss';
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   onAction: () => void;
   icon: React.ReactNode;
-  variant?: 'primary' | 'secondary'; // Las dos opciones
+  variant?: 'primary' | 'secondary'; 
   buttonLabel?: string;
 }
 
@@ -16,7 +16,6 @@ const InputWithButton = forwardRef<HTMLInputElement, Props>(
       if (inputProps.onKeyDown) inputProps.onKeyDown(e);
     };
 
-    // Combinamos las clases dinámicamente
     const containerClass = `${styles.container} ${styles[variant]}`;
 
     return (

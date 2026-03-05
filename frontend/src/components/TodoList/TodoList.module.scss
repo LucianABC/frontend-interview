@@ -21,22 +21,35 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
+
 .header {
   background-color: var(--primary);
   color: var(--bg-color);
   margin: 0;
+  
+  gap: 8px;
   padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  user-select: none; // Evita que se seleccione el texto al arrastrar visualmente
-
   h2 {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
   }
+
+  button {
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: antiquewhite;
+
+    svg {
+      fill: var(--bg-color) !important;
+      stroke: var(--bg-color) !important
+    }
+  }
 }
+
 .windowControls {
   display: flex;
   gap: 8px;
@@ -44,15 +57,7 @@
   button {
     width: 22px;
     height: 22px;
-    border-radius: 50%;
-    display: inline-block;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background-color: antiquewhite;
-    svg {
-      fill: var(--bg-color) !important
-    }
   }
-
 }
 
 .content {
@@ -60,34 +65,9 @@
   flex-direction: column;
   padding: 15px;
   background-color: var(--card-bg);
-  
-
-}
-
-.addTodo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid var(--primary);
-  border-radius: v.$border-radius;
-  background-color: var(--bg-color);
-  overflow: hidden;
-  width: 100%;
-
-  button {
-    height: 32px;
-    width: 32px;
-  }
-
-  input {
-    width: 100%;
-    padding: 8px;
-    color: var(--text-main);
-    border: none;
-    border-radius: v.$border-radius 0 0 v.$border-radius;
-  }
 }
 
 .list {
   padding: 0;
 }
+

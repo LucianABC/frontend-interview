@@ -8,6 +8,7 @@ import Expanded from '../../assets/arrow-down-circle.svg?react'
 import Collapsed from '../../assets/arrow-right-circle.svg?react'
 import Edit from '../../assets/edit.svg?react'
 import EditModal from "./EditItemModal"
+import Check from '../../assets/check-circle.svg?react'
 
 interface Props {
   item: TodoI,
@@ -33,7 +34,7 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
   }
 
   const handleOnLeave = () => {
-    // setShowButtons(false)
+    setShowButtons(false)
   }
 
   const handleEditClick = () => {
@@ -42,9 +43,16 @@ const ListItem = ({ item, listId, onUpdate }: Props) => {
 
   return (<li key={item.id} className={styles.listItem} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave}>
     <div className={styles.itemContent}>
-      <label>
-        <input type="checkbox" checked={item.done} />
-        <h3 className={item.done ? styles.completed : ''}> {item.name}</h3>
+      <label className={styles.checkboxContainer}>
+        <input
+          type="checkbox"
+          checked={item.done}
+          onChange={() => {/* Aquí iría tu lógica de update */ }}
+        />
+        <span className={styles.customCheck}>
+          {item.done && <Check/>}
+        </span>
+        <h3 className={item.done ? styles.completed : ''}>{item.name}</h3>
       </label>
 
       {showButtons && (<div className={styles.buttons}>

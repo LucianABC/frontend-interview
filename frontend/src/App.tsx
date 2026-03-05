@@ -3,6 +3,7 @@ import './App.scss'
 import { getLists } from './api/list'
 import TodoList from './components/TodoList/TodoList'
 import { useTheme } from './context/ThemeContext'
+import { useLists } from './context/ListsContext'
 import { TodoListI } from './types/TodoList'
 import Brightness from './assets/brightness.svg?react'
 import NewFile from './assets/new-file.svg?react'
@@ -11,7 +12,7 @@ import { createList } from './api/list';
 
 function App() {
   const { theme, toggleTheme } = useTheme();
-  const [lists, setLists] = useState<TodoListI[]>([])
+  const { lists, setLists } = useLists();
   const [showCreateListDialog, setShowCreateListDialog] = useState(false);
   const [newListName, setNewListName] = useState('');
 

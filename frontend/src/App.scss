@@ -6,7 +6,6 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-
 }
 
 #root {
@@ -41,7 +40,7 @@ body {
   }
 
   input {
-    background-color: transparent;
+    padding-left: 1rem;
   }
 
   button {
@@ -71,7 +70,7 @@ textarea {
   padding: 0.8rem;
   border-radius: 8px;
   border: 1px solid rgba(v.$violet-base, 0.3);
-  background-color: var(--bg-color);
+  background-color: transparent;
   color: var(--text-main);
   font-family: inherit;
   transition: border-color 0.2s;
@@ -144,6 +143,15 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  input[type='text'] , textarea {
+    background-color: v.$translucent-dark !important;
+
+    &:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+  }
 }
 
 .new-list-btn {

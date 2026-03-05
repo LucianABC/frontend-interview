@@ -58,13 +58,16 @@ export default tseslint.config({
       - POST
       - DELETE
       - GET all by list id
+
       - Falta: Get by list item id (buscar un item dentro de una lista)
 
       Todolist:
       - GET all todo lists
       - DELETE 
       - POST
-      -Falta:  PUT, GET by id,
+      - PUT
+      
+      -Falta: GET by id,
 
 
 - Drag and drop de items dentro de una lista (orden) y guardar en el navegador ese orden

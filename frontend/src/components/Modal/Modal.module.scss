@@ -11,7 +11,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    backdrop-filter: blur(4px); // Efecto moderno de desenfoque
+    backdrop-filter: blur(4px); 
 }
 
 .modalContainer {
@@ -48,10 +48,10 @@
     display: flex;
     padding: 5px;
 
-    .icon {
+    svg {
         width: 24px;
         height: 24px;
-        fill: var(--bg-color);
+        stroke: var(--bg-color);
     }
 }
 

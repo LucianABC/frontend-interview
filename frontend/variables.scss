@@ -30,6 +30,8 @@ $mobile-breakpoint: 480px;
 $tablet-breakpoint: 768px;
 $desktop-breakpoint: 1280px;
 
+$translucent-dark: rgba(0, 0, 0, 0.2);
+$translucent-light: rgba(255, 255, 255, 0.13);
 :root {
   --bg-color: #{$light-bg};
   --card-bg: #{$light-card};

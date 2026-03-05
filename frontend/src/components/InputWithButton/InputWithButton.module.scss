@@ -1,0 +1,72 @@
+@use '../../../variables' as v;
+
+.container {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: v.$border-radius;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    padding: 4px;
+
+    &.primary {
+        background-color: v.$translucent-light;
+        border-color: var(--primary);
+        box-shadow: inset 0 0 0 2px v.$translucent-light;
+
+        .button {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        &:focus-within {
+            box-shadow: 0 0 0 2px rgba(v.$translucent-light, 0.3);
+        }
+    }
+
+    &.secondary {
+        background-color: v.$translucent-dark;
+        border-color: var(--bg-color);
+        box-shadow: inset 0 0 0 2px v.$translucent-dark;
+
+        .button {
+            background-color: transparent;
+            color: var(--primary);
+            border-left: 1px solid var(--disabled-text);
+        }
+
+        &:focus-within {
+            box-shadow: 0 0 0 2px rgba(v.$translucent-dark, 0.3);
+        }
+    }
+}
+
+.input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text-main);
+    outline: none;
+}
+
+.button {
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+  
+}
+
+.iconWrapper {
+    svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+
+    }
+}

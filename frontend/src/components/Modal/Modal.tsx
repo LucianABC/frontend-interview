@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from './Modal.module.scss';
-import Times from '../../assets/Times.svg?react'; // Asumiendo que usas svgr
+import Times from '../../assets/times.svg?react'; 
 
 interface ModalProps {
   isOpen: boolean;
@@ -21,7 +21,7 @@ const Modal = ({ isOpen, onClose, onSubmit, submitEnabled = false, title, childr
         <header className={styles.header}>
           <h2>{title}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
-            <Times className={styles.icon} />
+            <Times height={24} />
           </button>
         </header>
 

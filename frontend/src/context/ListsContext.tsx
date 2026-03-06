@@ -4,7 +4,7 @@ import { createListItem as createListItemAPI, updateListItem as updateListItemAP
 import { TodoI, TodoListI } from '../types/TodoList';
 import { arrayMove } from '@dnd-kit/sortable';
 
-const LISTS_STORAGE_KEY = 'todo_lists'
+export const LISTS_STORAGE_KEY = 'todo_lists'
 
 type Action =
   | { type: 'REORDER'; listId: number; newOrder: any[] }
@@ -57,7 +57,6 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
         return state?.map(l => l.id === action.listId ? { ...l, todoItems: action.newOrder } : l);
 
       case 'ADD_ITEM': {
-        console.log({ state, action })
         return state?.map(l =>
           String(l.id) === String(action.listId)
             ? { ...l, todoItems: [...l.todoItems, { ...action.newItem }] }
@@ -65,7 +64,6 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
         );
       }
       case 'DELETE_ITEM': {
-        console.log({ state, action })
         return state?.map(l =>
           String(l.id) === String(action.listId)
             ? { ...l, todoItems: l.todoItems.filter(t => String(t.id) !== String(action.itemId)) }
@@ -120,19 +118,19 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
   const createList = async ({ name }: { name: string }) => {
     startTransition(async () => {
       setOptimisticLists({ type: 'ADD', name });
+      try {
+        const newList = await createListAPI({ name });
+        setLists(prev => [...prev, newList]);
+      } catch (error) {
+        console.error('Error creating list:', error);
+      }
     })
-    try {
-      const newList = await createListAPI({ name });
-      setLists(prev => [...prev, newList]);
-    } catch (error) {
-      console.error('Error creating list:', error);
-    }
   };
 
   const reorderItems = async (listId: number, activeId: number, overId: number) => {
     const targetList = optimisticLists?.find(l => l.id === listId);
     if (!targetList) return;
-
+    const previousOrders = localStorage.getItem(LISTS_STORAGE_KEY);
     const oldIndex = targetList.todoItems.findIndex(t => t.id === activeId);
     const newIndex = targetList.todoItems.findIndex(t => t.id === overId);
     if (oldIndex === newIndex) return;
@@ -146,12 +144,18 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
       savedOrders[listId] = newTasksOrder.map(item => item.id);
       localStorage.setItem(LISTS_STORAGE_KEY, JSON.stringify(savedOrders));
       try {
-        // await updateTasksOrderApi(listId, newTasksOrder.map(t => t.id));
+        // const res = await updateTasksOrderApi(listId, newTasksOrder.map(t => t.id));
+        // if (!res)  throw new Error("404");
         setLists(prev => prev.map(l =>
           l.id === listId ? { ...l, todoItems: newTasksOrder } : l
         ));
       } catch (error) {
         console.error("Error al persistir el orden:", error);
+        if (previousOrders) {
+          localStorage.setItem(LISTS_STORAGE_KEY, previousOrders);
+        } else {
+          localStorage.removeItem(LISTS_STORAGE_KEY);
+        }
       }
     });
   };
@@ -190,10 +194,12 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
   const createListItem = async (listId: number, { name, description }: { name: string, description: string }) => {
     const tempId = Date.now();
     const newItem = { name, description };
+    const previousOrders = localStorage.getItem(LISTS_STORAGE_KEY);
 
     startTransition(async () => {
       setOptimisticLists({ type: 'ADD_ITEM', listId, newItem: { ...newItem, id: tempId, done: false } });
-      const savedOrders = JSON.parse(localStorage.getItem(LISTS_STORAGE_KEY) || '{}');
+
+      const savedOrders = JSON.parse(previousOrders || '{}');
       savedOrders[listId] = [...(savedOrders[listId] || []), tempId];
       localStorage.setItem(LISTS_STORAGE_KEY, JSON.stringify(savedOrders));
 
@@ -209,6 +215,14 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
         ));
       } catch (error) {
         console.error('Error creating item:', error);
+        if (previousOrders) {
+          localStorage.setItem(LISTS_STORAGE_KEY, previousOrders);
+        } else {
+          // Si no había nada antes, debemos limpiar el desastre que hizo el cambio optimista
+          const current = JSON.parse(localStorage.getItem(LISTS_STORAGE_KEY) || '{}');
+          delete current[listId]; // Eliminamos la entrada que creamos para el tempId
+          localStorage.setItem(LISTS_STORAGE_KEY, JSON.stringify(current));
+        }
       }
     });
 
@@ -230,26 +244,32 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteListItem = async (listId: number, itemId: number) => {
+    const previousOrders = localStorage.getItem(LISTS_STORAGE_KEY);
     startTransition(async () => {
       setOptimisticLists({ type: 'DELETE_ITEM', listId, itemId });
+
+
+      const savedOrders = JSON.parse(previousOrders || '{}');
+      if (savedOrders[listId]) {
+        savedOrders[listId] = savedOrders[listId].filter((id: number) => id !== itemId);
+        localStorage.setItem(LISTS_STORAGE_KEY, JSON.stringify(savedOrders));
+      }
+      try {
+        await deleteListItemAPI(listId, itemId);
+
+
+
+        setLists(prev => prev.map(l => l.id === listId
+          ? { ...l, todoItems: l.todoItems.filter(t => t.id !== itemId) }
+          : l
+        ));
+      } catch (error) {
+        console.error('Error deleting item:', error);
+        if (previousOrders) {
+          localStorage.setItem(LISTS_STORAGE_KEY, previousOrders);
+        }
+      }
     });
-    const savedOrders = JSON.parse(localStorage.getItem(LISTS_STORAGE_KEY) || '{}');
-    if (savedOrders[listId]) {
-      savedOrders[listId] = savedOrders[listId].filter((id: number) => id !== itemId);
-      localStorage.setItem(LISTS_STORAGE_KEY, JSON.stringify(savedOrders));
-    }
-    try {
-      await deleteListItemAPI(listId, itemId);
-
-
-
-      setLists(prev => prev.map(l => l.id === listId
-        ? { ...l, todoItems: l.todoItems.filter(t => t.id !== itemId) }
-        : l
-      ));
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
   };
 
   const getListById = async (listId: number) => {
@@ -272,9 +292,11 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
           ? prev.map(l => l.id === listId ? freshList : l)
           : [...prev, freshList];
       });
+      return freshList
     } catch (error) {
       setSearchResult(null)
       console.error("Error al obtener la lista:", error);
+      return undefined
     } finally {
       setIsLoading(false);
     }

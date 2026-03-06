@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Modal from '../Modal/Modal';
 import { TodoI } from '../../types/TodoList';
-import { updateListItem } from '../../api/list-item';
 import styles from './ListItem.module.scss';
-
+import { useLists } from '../../context/ListsContext';
 interface EditModalProps {
   item: TodoI & { listId: number };
   isOpen: boolean;
   onClose: () => void;
 }
 const EditModal = ({ item, isOpen, onClose }: EditModalProps) => {
+  const {updateListItem} = useLists()
   const [updatedItem, setUpdatedItem] = useState<TodoI>(item);
 
   const handleSubmit = async () => {
@@ -18,7 +18,6 @@ const EditModal = ({ item, isOpen, onClose }: EditModalProps) => {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    console.log('change', e.target.name, e.target.value)
     const { name, value } = e.target;
     setUpdatedItem(prev => ({ ...prev, [name]: value }));
   }

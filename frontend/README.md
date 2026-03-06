@@ -50,6 +50,9 @@ export default tseslint.config({
 ```
 - Drag and drop de items dentro de una lista (orden) y guardar en el navegador ese orden
 - Diseño: mobile first
+
+- Funcionalidad de los checks para eso necesito (v)
+- Optimistic updates: CONTEXT!!!!!!!!
 - Colores: light and dark mode con un switch p cambiar
 - CRUD completo de listas como items
     WIP:
@@ -70,8 +73,6 @@ export default tseslint.config({
 
 
 - Tests (no todo pero algo)
-- Funcionalidad de los checks para eso necesito (v)
-- Optimistic updates: CONTEXT!!!!!!!!
 -Input validations
 
 - Si uso IA, exportar los prompt

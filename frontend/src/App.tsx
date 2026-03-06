@@ -1,36 +1,43 @@
 import './App.scss'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useLists } from './context/ListsContext'
-import { createList } from './api/list';
 import TodoList from './components/TodoList/TodoList'
 import Modal from './components/Modal/Modal'
 import Header from './components/Header/Header'
-import { DndContext } from '@dnd-kit/core';
 
 function App() {
-  const { lists, setLists } = useLists();
+  const { lists, createList, searchResult, clearSearch } = useLists();
   const [showCreateListDialog, setShowCreateListDialog] = useState(false);
   const [newListName, setNewListName] = useState('');
 
   const handleCreateList = async () => {
     await createList({ name: newListName }).then(newList => {
-      setLists(prev => [...prev, newList]);
       setShowCreateListDialog(false);
       setNewListName('');
     })
   }
 
+  const noRecords = searchResult === null || !lists || lists.length === 0;
+
+  const noResults = (!lists || lists.length === 0) ? (<h2 onClick={() => setShowCreateListDialog(true)}>No lists available. Try <a>creating</a> one.</h2>) : (<h2>No results. <a onClick={clearSearch}>Clear search </a>or try a different ID.</h2>)
+
+  const cards = useMemo(() => {
+    if (searchResult === undefined) {
+      return lists
+    }
+    return searchResult
+  }, [lists, searchResult])
 
   return (
     <>
       <Header setShowCreateListDialog={setShowCreateListDialog} />
       <main>
         <section className="lists-grid">
-          {lists.length > 0 && lists.map(list => (
+          {noRecords ? noResults : (cards?.map(list => (
             <div key={list.id}>
               <TodoList key={list.id} listId={list.id} />
             </div>
-          ))}
+          )))}
         </section>
         {showCreateListDialog && (<Modal isOpen={showCreateListDialog} submitEnabled={newListName.trim() !== ''} onSubmit={handleCreateList} onClose={() => setShowCreateListDialog(false)} title="Create new list">
           <div className='field'>
@@ -47,7 +54,6 @@ function App() {
           </div>
         </Modal>)}
       </main>
-
     </>
   )
 }

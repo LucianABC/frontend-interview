@@ -3,15 +3,14 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   border: 1px solid var(--primary);
   border-radius: v.$border-radius;
   color: var(--text-main);
   overflow: hidden;
   transition: transform 0.2s ease;
-
-  h2 {
-    padding: 10px;
-  }
+  width: 100%;
+  max-width: calc(100vw - 64px);
 
   &:hover {
     transform: scale(1.05);
@@ -22,15 +21,31 @@
 .header {
   background-color: var(--primary);
   color: var(--bg-color);
-  margin: 0;  
+  margin: 0;
   gap: 8px;
   padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-width: 0;
 
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  h2 {
+    text-align: left;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
 
   button {
+    flex-shrink: 0;
     display: inline-block;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: antiquewhite;
@@ -45,8 +60,10 @@
 .windowControls {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 
   button {
+    flex-shrink: 0;
     width: 22px;
     height: 22px;
   }
@@ -60,6 +77,51 @@
 }
 
 .list {
-  padding: 0;
+  padding-left: 15px;
 }
 
+.inputControls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+
+  .modeButtons {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+
+    button {
+      width: 26px;
+      height: 26px;
+      transition: all 0.2s ease;
+
+      &.active {
+        display: none !important;
+      }
+    }
+  }
+
+  .expandableInput {
+    display: flex;
+    align-items: center;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    flex-grow: 1;
+
+    &.expanded {
+      max-width: 500px;
+      opacity: 1;
+      margin-left: 5px;
+    }
+
+
+    &>div {
+      width: 100%;
+    }
+  }
+}

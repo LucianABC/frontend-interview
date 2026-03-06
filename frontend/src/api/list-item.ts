@@ -10,9 +10,9 @@ export const createListItem = async (listId: number, { name, description }: { na
   }
 }
 
-export const updateListItem = async (listId: number, itemId: number, { name, description }: { name: string, description?: string }) => {
+export const updateListItem = async (listId: number, itemId: number, { name, description, done }: { name?: string, description?: string, done?: boolean }) => {
   try {
-    const response = await axios.put(`/api/todo-lists/${listId}/todo-items/${itemId}`, { name, description }) // Ver si el undefined es un problema
+    const response = await axios.put(`/api/todo-lists/${listId}/todo-items/${itemId}`, { name, description, done }) // Ver si el undefined es un problema
     return response.data
   }
   catch (error) {

@@ -1,12 +1,12 @@
 
-import { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext'
-import { getListById } from '../../api/list';
 import Brightness from '../../assets/brightness.svg?react'
 import NewFile from '../../assets/new-file.svg?react'
 import Search from '../../assets/search.svg?react'
 import styles from './Header.module.scss';
 import InputWithButton from '../InputWithButton/InputWithButton';
+import { useLists } from '../../context/ListsContext';
 
 interface Props {
   setShowCreateListDialog: (show: boolean) => void;
@@ -14,43 +14,47 @@ interface Props {
 
 const Header: React.FC<Props> = ({ setShowCreateListDialog }) => {
   const { theme, toggleTheme } = useTheme();
+  const { getListById } = useLists();
   const [listSearch, setListSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    if (showSearch) {
+      searchInputRef.current?.focus();
+      searchInputRef.current?.select();
+    }
+  }, [showSearch]);
 
   const toggleSearch = () => {
     setShowSearch(prev => !prev);
   }
 
   const submitSearch = async () => {
-    await getListById(Number(listSearch)).then(list => {
-      console.log('List found:', list);
-      // You can set the found list to state or navigate to it
-    }).catch(error => {
-      console.error('Error fetching list:', error);
-    });
-
+    await getListById(Number(listSearch))
+    setListSearch('')
     toggleSearch()
   }
 
   return (
     <header className={styles.header}>
       <div className={styles.menu}>
-        <button className={styles.headerButton} onClick={() => setShowCreateListDialog(true)}>
+        <button onClick={() => setShowCreateListDialog(true)}>
           <NewFile height={28} width={28} />
-          <h2>Create list</h2>
         </button>
-        {showSearch ? (<button className={styles.headerButton} onClick={toggleSearch}>
-          <Search height={28} width={28} />
-        </button>) : (<div className={styles.search}>
+        {showSearch ? (<div className={styles.search}>
           <InputWithButton
+            ref={searchInputRef}
+            onBlur={() => setShowSearch(false)}
             onAction={submitSearch}
             icon={<Search height={20} width={20} />}
             placeholder="Search list by Id"
             value={listSearch}
             onChange={(e) => setListSearch(e.target.value)}
           />
-        </div>)}
+        </div>) : (<button onClick={toggleSearch} >
+          <Search height={28} width={28} />
+        </button>)}
       </div>
 
       <label className={styles.switch}>

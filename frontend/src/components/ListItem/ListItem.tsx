@@ -1,15 +1,17 @@
 
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { useSortable } from "@dnd-kit/sortable"
 import { useLists } from "../../context/ListsContext"
 import { TodoI } from "../../types/TodoList"
 import styles from './ListItem.module.scss'
+import EditModal from "./EditItemModal"
 import Times from '../../assets/times.svg?react'
 import Expanded from '../../assets/arrow-down-circle.svg?react'
 import Collapsed from '../../assets/arrow-right-circle.svg?react'
 import Edit from '../../assets/edit.svg?react'
-import EditModal from "./EditItemModal"
 import Check from '../../assets/check-circle.svg?react'
+import Hamburger from '../../assets/hamburger.svg?react'
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   item: TodoI,
@@ -17,11 +19,10 @@ interface Props {
 }
 
 const ListItem = ({ item, listId }: Props) => {
-  const { deleteListItem } = useLists();
-  const [showButtons, setShowButtons] = useState(false);
+  const { deleteListItem, updateListItem } = useLists();
   const [showDesc, setShowDesc] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const { attributes, listeners, setNodeRef, transform } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: `${listId}-${item.id}`,
   });
 
@@ -33,43 +34,39 @@ const ListItem = ({ item, listId }: Props) => {
     }
   }
 
-  const handleOnHover = () => {
-    setShowButtons(true)
-  }
-
-  const handleOnLeave = () => {
-    setShowButtons(false)
-  }
-
   const handleEditClick = () => {
     setShowEditModal(true)
   }
 
-  const style = transform
-    ? {
-      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-    }
-    : undefined;
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1, // Feedback visual al arrastrar
+  };
 
-  return (<li key={`${listId}-${item.id}`} className={styles.listItem} style={style} onMouseEnter={handleOnHover} onMouseLeave={handleOnLeave} ref={setNodeRef} >
+  const handleCheckbox = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+    updateListItem(listId, item.id, { done: e.target.checked })
+  }
+  return (<li key={`${listId}-${item.id}`} className={styles.listItem} style={style} ref={setNodeRef} >
+
     <div className={styles.itemContent}>
-      <div className={styles.dragHandle} {...attributes} {...listeners}>
-        {/* Un icono de 6 puntos o similar para indicar que se puede arrastrar */}
-        ⋮⋮
+      
+      <div className={styles.checkboxContainer}>
+        <label>
+          <input
+            type="checkbox"
+            checked={item.done}
+            onChange={handleCheckbox}
+          />
+          <span className={styles.customCheck}>
+            {item.done && <Check />}
+          </span></label>
+        <h3 className={
+          `${styles.itemTitle} ${item.done ? styles.completed : ''}`
+        }>{item.name}</h3>
       </div>
-      <label className={styles.checkboxContainer}>
-        <input
-          type="checkbox"
-          checked={item.done}
-          onChange={() => {/* Aquí iría tu lógica de update */ }}
-        />
-        <span className={styles.customCheck}>
-          {item.done && <Check />}
-        </span>
-        <h3 className={item.done ? styles.completed : ''}>{item.name}</h3>
-      </label>
 
-      {showButtons && (<div className={styles.buttons}>
+      <div className={styles.buttons}>
         {item.description && (
           <button
             onClick={() => setShowDesc(!showDesc)}
@@ -85,8 +82,10 @@ const ListItem = ({ item, listId }: Props) => {
         <button aria-label={`Delete Todo ${item.name}`} onClick={(e) => handleDelete(item.id)}>
           <Times width={18} height={18} />
         </button>
-
-      </div>)}
+        <button {...attributes} {...listeners} className={styles.dragHandle}>
+          <Hamburger height={20} width={20} />
+        </button>
+      </div>
 
     </div>
 

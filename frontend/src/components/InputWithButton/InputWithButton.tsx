@@ -19,7 +19,7 @@ const InputWithButton = forwardRef<HTMLInputElement, Props>(
     const containerClass = `${styles.container} ${styles[variant]}`;
 
     return (
-      <div className={containerClass}>
+      <div className={containerClass} >
         <input
           ref={ref}
           className={styles.input}

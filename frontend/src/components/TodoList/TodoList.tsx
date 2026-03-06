@@ -12,6 +12,7 @@ import ListItem from "../ListItem/ListItem"
 import Dialog from "../Dialog/Dialog"
 import Check from '../../assets/check-circle.svg?react'
 import InputWithButton from "../InputWithButton/InputWithButton"
+import { TodoI } from "../../types/TodoList";
 
 type InputMode = 'SEARCH' | 'ADD'
 
@@ -20,7 +21,7 @@ interface Props {
 }
 
 const TodoList = ({ listId }: Props) => {
-  const { lists, reorderItems, deleteList, updateList, createListItem, getItemById } = useLists();
+  const { lists, reorderItems, deleteList, updateList, createListItem, getItemById, getItemsByListId } = useLists();
   const list = lists?.find(l => l.id === listId) ?? { name: '', todoItems: [], id: Date.now() };
 
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -31,6 +32,8 @@ const TodoList = ({ listId }: Props) => {
   const [editMode, setEditMode] = useState(false);
   const [listName, setListName] = useState(list?.name ?? '');
   const [inputMode, setInputMode] = useState<InputMode>();
+  const [listItems, setListItems] = useState<TodoI[]>(list.todoItems)
+  const [showClearSearch, setShowClearSearch] = useState(false)
 
   useEffect(() => {
     if (editMode) {
@@ -38,6 +41,11 @@ const TodoList = ({ listId }: Props) => {
       nameInputRef.current?.select();
     }
   }, [editMode]);
+
+  useEffect(()=>{
+    setListItems(list.todoItems)
+  },[list.todoItems])
+
 
   const toggleEditMode = () => {
     setEditMode(prev => !prev);
@@ -84,7 +92,11 @@ const TodoList = ({ listId }: Props) => {
   const handleSearchItem = async () => {
     if (!inputText) return;
     const itemId = Number(inputText)
-    await getItemById(listId, itemId)
+    const result = await getItemById(listId, itemId)
+    if (result) {
+      setListItems([result])
+      setShowClearSearch(true)
+    }
     setInputText('')
   }
 
@@ -100,6 +112,7 @@ const TodoList = ({ listId }: Props) => {
   };
 
   const handleAction = async () => {
+    console.log('actino', {inputText, inputMode})
     if (!inputText) return;
 
     if (inputMode === 'ADD') {
@@ -111,8 +124,11 @@ const TodoList = ({ listId }: Props) => {
     setInputText('');
     setInputMode(undefined); // Cerramos después de la acción
   };
-
-  const sortableItems = list.todoItems.map(t => `${listId}-${t.id}`);
+  const handleClearSearch = () => {
+    setListItems(list.todoItems)
+    setShowClearSearch(false)
+  }
+  const sortableItems = listItems.map(t => `${listId}-${t.id}`);
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <SortableContext items={sortableItems}>
@@ -153,7 +169,6 @@ const TodoList = ({ listId }: Props) => {
                 <InputWithButton
                   ref={actionInputRef}
                   value={inputText}
-                  onBlur={() => setInputMode(undefined)}
                   onChange={(e) => setInputText(e.target.value)}
                   onAction={handleAction}
                   icon={inputMode === 'ADD' ? <Plus /> : <Search />}
@@ -163,9 +178,10 @@ const TodoList = ({ listId }: Props) => {
               </div>
 
             </div>
-            {list.todoItems.length < 1 ? (<h3>No tasks have been entered yet</h3>) :
+            {showClearSearch ? (<button className={styles.clearSearch} onClick={handleClearSearch}>Clear search</button>) : null}
+            {listItems.length < 1 ? (<h3>No tasks have been entered yet</h3>) :
               (<ul className={styles.list}>
-                {list.todoItems.map(todo => (
+                {listItems.map(todo => (
                   <ListItem key={todo.id} item={todo} listId={listId} />
                 ))}
               </ul>)

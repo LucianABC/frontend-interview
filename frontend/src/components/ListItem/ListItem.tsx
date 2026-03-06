@@ -47,6 +47,7 @@ const ListItem = ({ item, listId }: Props) => {
   const handleCheckbox = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
     updateListItem(listId, item.id, { done: e.target.checked })
   }
+
   return (<li key={`${listId}-${item.id}`} className={styles.listItem} style={style} ref={setNodeRef} >
 
     <div className={styles.itemContent}>

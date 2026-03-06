@@ -9,6 +9,7 @@ function App() {
   const { lists, createList, searchResult, clearSearch } = useLists();
   const [showCreateListDialog, setShowCreateListDialog] = useState(false);
   const [newListName, setNewListName] = useState('');
+  const [showClearSearch, setShowClearSearch] = useState(false)
 
   const handleCreateList = async () => {
     await createList({ name: newListName }).then(newList => {
@@ -22,16 +23,18 @@ function App() {
   const noResults = (!lists || lists.length === 0) ? (<h2 onClick={() => setShowCreateListDialog(true)}>No lists available. Try <a>creating</a> one.</h2>) : (<h2>No results. <a onClick={clearSearch}>Clear search </a>or try a different ID.</h2>)
 
   const cards = useMemo(() => {
-    if (searchResult === undefined) {
+    if (searchResult === undefined || !Array.isArray(searchResult)) {
       return lists
     }
     return searchResult
   }, [lists, searchResult])
+console.log({searchResult})
 
   return (
     <>
       <Header setShowCreateListDialog={setShowCreateListDialog} />
       <main>
+        {searchResult && Array.isArray(searchResult) && (<button onClick={clearSearch}>Clear Search</button>)}
         <section className="lists-grid">
           {noRecords ? noResults : (cards?.map(list => (
             <div key={list.id}>

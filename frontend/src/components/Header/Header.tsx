@@ -45,7 +45,6 @@ const Header: React.FC<Props> = ({ setShowCreateListDialog }) => {
         {showSearch ? (<div className={styles.search}>
           <InputWithButton
             ref={searchInputRef}
-            onBlur={() => setShowSearch(false)}
             onAction={submitSearch}
             icon={<Search height={20} width={20} />}
             placeholder="Search list by Id"

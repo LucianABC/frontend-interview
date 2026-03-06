@@ -28,10 +28,11 @@ interface ListContextType {
   updateListItem: (listId: number, itemId: number, data: { name?: string, description?: string; done?: boolean }) => Promise<void>;
   deleteListItem: (listId: number, itemId: number) => Promise<void>;
   getListById: (id: number) => Promise<void>
-  getItemById: (listId: number, itemId: number) => Promise<void>;
+  getItemById: (listId: number, itemId: number) => Promise<TodoI | undefined>;
   searchResult?: TodoListI[] | null;
   isLoading?: boolean;
   clearSearch: () => void;
+  getItemsByListId: (id: number) => Promise<TodoI[] | undefined>
 }
 
 const ListsContext = createContext<ListContextType | undefined>(undefined);
@@ -94,7 +95,6 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
     async function loadData() {
       const response = await getListsAPI();
 
-      // Recuperar el mapa de órdenes del localStorage { listId: [id1, id2, ...] }
       const savedOrders = JSON.parse(localStorage.getItem(LISTS_STORAGE_KEY) || '{}');
 
       const orderedResponse = response.map((list: TodoListI) => {
@@ -302,46 +302,47 @@ export const ListsProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-
   const getItemById = async (listId: number, itemId: number) => {
     setIsLoading(true);
-
-    const currentList = optimisticLists?.find(l => l.id === listId);
-    const cachedItem = currentList?.todoItems.find(t => t.id === itemId);
-
-    if (cachedItem && currentList) {
-      setSearchResult([{ ...currentList!, todoItems: [cachedItem] }]);
-    }
-
     try {
       const freshItem = await getItemByIdAPI(listId, itemId);
 
       if (!freshItem) throw new Error("404");
 
-      setSearchResult(prev => prev ? { ...prev, todoItems: [freshItem] } : null);
-      setLists(prev => prev.map(l =>
-        l.id === listId
-          ? { ...l, todoItems: l.todoItems.map(t => t.id === itemId ? freshItem : t) }
-          : l
-      ));
-
+      return freshItem
     } catch (error) {
       console.error("Error al obtener el ítem:", error);
-      setSearchResult(null);
-      setLists(prev => prev.map(l =>
-        l.id === listId
-          ? { ...l, todoItems: l.todoItems.filter(t => t.id !== itemId) }
-          : l
-      ));
+
+      return null
     } finally {
       setIsLoading(false);
     }
   };
 
+  const getItemsByListId = async (listId: number): Promise<TodoI[] | undefined> => {
+    setIsLoading(true);
+
+    try {
+      const freshList = await getListByIdAPI(listId);
+
+      if (!freshList || Object.keys(freshList).length === 0) {
+        throw new Error("404");
+      }
+
+      return freshList.todoItems;
+
+    } catch (error) {
+      console.error("Error al obtener ítems de la lista:", error);
+
+      return undefined;
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const clearSearch = () => setSearchResult(undefined);
 
   return (
-    <ListsContext.Provider value={{ lists: optimisticLists, setLists, isLoading, clearSearch, searchResult, createList, updateList, reorderItems, getListById, deleteList, createListItem, updateListItem, deleteListItem, getItemById }}>
+    <ListsContext.Provider value={{ lists: optimisticLists, setLists, isLoading, clearSearch, searchResult, createList, updateList, reorderItems, getListById, deleteList, createListItem, updateListItem, deleteListItem, getItemById, getItemsByListId }}>
       {children}
     </ListsContext.Provider>
   );

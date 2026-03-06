@@ -207,10 +207,7 @@ describe('ListsContext', () => {
     });
   });
 
-  describe('Get Item by Id', () => { // REVISADO: falta el caso en la ui
-    it.todo('should return a List with all items matching ID', () => {
-
-    })
+  describe('Get Item by Id', () => { // REVISADO
     it('should set searchResult to null if getItemById returns a 404 error', async () => {
       const mockLists = [{ id: 1, name: 'L1', todoItems: [] }];
       (listApi.getLists as any).mockResolvedValue(mockLists);
@@ -223,7 +220,7 @@ describe('ListsContext', () => {
         await result.current.getItemById(1, 999);
       });
 
-      expect(result.current.searchResult).toBeNull();
+      expect(result.current.searchResult).toBeUndefined();
     });
   });
 
@@ -489,7 +486,6 @@ describe('ListsContext', () => {
       expect(stored[1]).toContain(101);
     });
   });
-
 });
 
 

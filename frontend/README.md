@@ -1,81 +1,53 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-- Drag and drop de items dentro de una lista (orden) y guardar en el navegador ese orden
-- Diseño: mobile first
-
-- Funcionalidad de los checks para eso necesito (v)
-- Optimistic updates: CONTEXT!!!!!!!!
-- Colores: light and dark mode con un switch p cambiar
-- CRUD completo de listas como items
-    WIP:
-      TodoItems: 
-      - PUT (falta checkbox)
-      - POST
-      - DELETE
-      - GET all by list id
-
-      - Falta: Get by list item id (buscar un item dentro de una lista)
-
-      Todolist:
-      - GET all todo lists
-      - DELETE 
-      - POST
-      - PUT
-      - GET by Id
 
 
-- Tests (no todo pero algo)
--Input validations
+Características Principales
+1. Arquitectura de Estado Optimista
+Implementamos un sistema donde la UI reacciona instantáneamente a las acciones del usuario, sin esperar la respuesta del servidor.
 
-- Si uso IA, exportar los prompt
+Creación/Borrado Instantáneo: Las listas y tareas aparecen y desaparecen al momento.
 
-- NTH: paginación
-- NTH: Error toasts.
+Reordenamiento Drag & Drop: Movimiento de ítems fluido con persistencia de orden inmediata.
+
+Eye-Animation System: Sistema visual que alterna entre Eye-0 (estado en reposo/sincronizado) y Eye-1 (estado de parpadeo/sincronizando) para dar feedback sutil al usuario mientras la API responde.
+
+2. Persistencia y Sincronización
+Estrategia de LocalStorage: Guardamos el orden de los IDs localmente para mantener la personalización del usuario incluso tras recargar la página.
+
+Auto-Rollback: En caso de error en la API (ej. caída de red), el sistema restaura automáticamente tanto la UI como el LocalStorage al último estado válido conocido.
+
+Caché Inteligente: Las listas ya visitadas se cargan instantáneamente desde la memoria mientras se actualizan en segundo plano.
+
+Stack Tecnológico
+Frontend: React 19 (Hooks: useOptimistic, useTransition, useContext).
+
+Estilos: SCSS Modules (Arquitectura BEM).
+
+Testing: Vitest + React Testing Library.
+
+Herramientas: TypeScript para un tipado estricto y seguro.
+
+Drag and drop: DnDKit
+
+Estructura del Contexto de Datos
+El ListContext es el cerebro de la aplicación. Maneja el flujo de datos de la siguiente manera:
+
+Captura de Snapshot: Antes de cualquier cambio, guardamos el estado actual.
+
+Dispatch Optimista: Actualizamos la UI inmediatamente mediante startTransition.
+
+Llamada Asíncrona: Se intenta persistir en la API.
+
+Resolución/Reversión: Si hay éxito, el estado se consolida. Si hay error, se aplica el rollback del snapshot.
+
+Notas de Implementación
+
+Input Components: Se desarrollaron componentes reutilizables como InputWithButton, optimizados para interacciones de teclado (Enter) y clicks táctiles, con soporte para forwardRef.
+
+Se tuvieron en cuenta conceptos de accesibilidad web.
+
+Admite theme light y dark y responsive.
+
+
+Como IA de ayuda utilicé principalmente Gemini IA.
+Prompts:
+https://gemini.google.com/share/f08690451f3a
